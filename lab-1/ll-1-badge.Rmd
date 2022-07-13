@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 ![](img/ML_P_Hx.jpg){width="30%"}
@@ -25,25 +25,25 @@ Part A:
 
 1.  How good was the machine learning model we developed in the guiding practice? Would you be comfortable using it to code more conversations? What if you read about someone using such a model as a reviewer of research? Please add your thoughts and reflections following the bullet point below.
 
--   
+-   The metrics certainly looked good, but I also don't think I have a strong intuition to be able to contextualize the amount of accuracy in the model. I would want to know what's generally considered good for a binary classifier in this type of context where we are categorizing the topics of text.
 
 2.  How might the model be improved? Share any ideas you have at this time below:
 
--   
+-   Feature engineering using text mining techniques would add a ton of potential for getting a better fit on the model.
 
 Part B: Use the institutional library (e.g. [NCSU Library](https://www.lib.ncsu.edu/#articles)), [Google Scholar](https://scholar.google.com/) or search engine to locate a research article, presentation, or resource that applies machine learning to an educational context aligned with your research interests. More specifically, **locate a machine learning study that involve making predictions**.
 
 1.  Provide an APA citation for your selected study.
 
-    -   
+    -   Bergin, S., Mooney, A., Ghent, J., & Quille, K. (2015). Using Machine Learning Techniques to Predict Introductory Programming Performance. International Journal of Computer Science and Software Engineering, 4(12), 323–328.
 
 2.  What research questions were the authors of this study trying to address and why did they consider these questions important?
 
-    -   
+    -   How can we predict the performance of introductory programming students? How accurate are such methods and which one is the best in this regard?
 
 3.  What were the results of these analyses?
 
-    -   
+    -  They tried 6 ML techniques, Naive Bayes had the best performance, but the accuracy wasn't significantly better than the other methods (Accuracy between 71.6% and 78.3% for all 6 methods)
 
 ### Part II: Data Product
 
@@ -64,25 +64,27 @@ final_fit
 Run the code below to calculate a \*confusion matrix\*
 
 ```{r}
-final_fit$.predictions[[1]] %>% 
+cm <- final_fit$.predictions[[1]] %>% 
     conf_mat(.pred_class, code)
 ```
 
 Please interpret the above confusion matrix using [these guidelines](https://towardsdatascience.com/understanding-confusion-matrix-a9ad42dcfd62) in terms of the true positive, true negative, false positive, and false negative rates. After each of the following (i.e., "True positive"), add both the *number* and percentage of observations. For instance, if there were 100 true positives out of a total of 400 data points, please write: 100 (25%).
 
-**True positive**:
+**Accuracy**: `r (cm$table[1] + cm$table[4]) / sum(cm$table)`
 
-**True negative**:
+**True positive**: `r cm$table[1] / (cm$table[1] + cm$table[3])`
 
-**False positive**:
+**True negative**: `r cm$table[4] / (cm$table[2] + cm$table[4])`
 
-**False negative**:
+**False positive**: `r cm$table[3] / (cm$table[1] + cm$table[3])`
+
+**False negative**: `r cm$table[2] / (cm$table[2] + cm$table[4])`
 
 You can read more about interpreting these [here](https://bradleyboehmke.github.io/HOML/process.html#classification-models) in terms of the specificity, sensitivity, precision, and recall, four statistics based on the information in the confusion matrix.
 
 Return to your answer for Part 1A. Now, having examined the true and false positive and negative rates, how good do you think machine learning model we developed in the case study was? Write more specifically using the evidence you have from creating and interpreting the confusion matrix (above) after the following bullet point.
 
--   
+-   I think it was pretty good still, but again I have little in the way of context for understanding whether this was good.
 
 ### Knit & Submit
 
