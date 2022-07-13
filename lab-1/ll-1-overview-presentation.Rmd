@@ -455,7 +455,7 @@ d <- read_csv("data/ngsschat-processed-data.csv")
 **Split data**
 
 ```{r panel-chunk-1, echo = TRUE, eval = FALSE}
-train_test_split <- initial_split(ddd, prop = .70)
+train_test_split <- initial_split(d, prop = .70)
 
 data_train <- training(train_test_split)
 data_test <- testing(train_test_split)

@@ -1,6 +1,6 @@
 ---
 title: 'Learning Lab 1 Case Study'
-author: ""
+author: "Lexi Lishinski"
 date: "`r format(Sys.Date(),'%B %e, %Y')`"
 output:
   html_document:
@@ -12,11 +12,10 @@ output:
 editor_options:
   markdown:
     wrap: 72
-bibliography: lit/references.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 First, please add your name above!
@@ -100,12 +99,13 @@ Note its dimensions --- especially how many rows it has. Add a few
 dashes after the chunk with your observations.
 
 ```{r}
-
+d
 ```
 
 *Observations*:
 
--   
+-   code is character variable with 2 categories
+-   The other variables are numeric 
 
 \*What other variables might we include?\*\* This is a great question to
 be asking - surely, including just the four variables we have cannot be
@@ -172,8 +172,11 @@ in the larger data. Do that in the chunk below:
 [Your Turn]{style="color: green;"} ⤵
 
 ```{r}
-
+d
+data_train
 ```
+
+3793 observations vs 3034 in the training set
 
 ## Step 2: Engineer features and write down the recipe
 
@@ -274,6 +277,7 @@ Type `final_fit` below; this is the final, fitted model---one that can
 be interpreted further in the next step!
 
 ```{r}
+final_fit
 ```
 
 You may see a message/warning above or when you examine `final_fit`; you
@@ -287,8 +291,11 @@ correspond one-one to the ID variables used in the presentation/Shiny.
 
 ```{r}
 # collect test split predictions
-final_fit %>%
-    collect_predictions()
+preds <- final_fit %>%
+    collect_predictions() %>%
+     mutate(correct = .pred_class == code)
+
+preds %>% roc_curve(code, .pred_SB) %>% autoplot()
 ```
 
 This is our first set of real output! Note two things:
@@ -319,13 +326,16 @@ final_fit %>%
     select(.pred_class, code) %>% # just to make the output easier to view 
     mutate(correct = .pred_class == code) %>% # create a new variable, correct, telling us when the model was and was not correct
     tabyl(correct)
+
+final_fit$.predictions[[1]] %>% 
+     conf_mat(.pred_class, code)
 ```
 
 Let's interpret the above. If the value of `correct` is `TRUE` when the
 predicted and known code are the same, what does the `percent` column
 tell us? Add one or more notes to the dashes below:
 
--   
+-   The percent of rows in the test set that did not match and did match between their predicted and and actual code.
 
 A short-cut to the above is below:
 
@@ -336,9 +346,9 @@ final_fit %>%
 
 **Observations**
 
--   
+-   This model worked pretty well, 87% correct from just these few indicators! The accuracy seems pretty good and the inaccuracy is balanced between the two categories.
 
--   
+-   The ROC AUC is still alive every time I rhyme. This metric looks quite good too, the ROC looks like what you'd want but my intuition about this is not as strong.
 
 That's it for now; the core parts of machine learning are used in the
 above steps you took; what we'll do after this leaning lab only adds
